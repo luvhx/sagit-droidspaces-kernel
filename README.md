@@ -42,9 +42,20 @@ fastboot reboot
 1. TWRP 中刷入 `DroidSpaces-sagit-4.4.302-kernel.zip`（只替换 kernel，保留原 ramdisk）；
 2. 重启，首次开机约 3–5 分钟。
 
-### 获取 root
+### 用 Magisk 获取 root（推荐）
 
-用 **Magisk** 修补当前 boot 获取 root（本内核未集成 KernelSU/SukiSU，原因见下）。
+1. 下载安装 [Magisk](https://github.com/topjohnwu/Magisk/releases/latest)（`Magisk-v*.apk`）；
+2. 打开 Magisk → **安装 → 选择并修补一个文件**，选择 `boot-sagit-droidspaces.img`，生成 `magisk_patched-*.img`；
+3. 把修补后的镜像拷到电脑：
+
+```bash
+fastboot flash boot magisk_patched-*.img
+fastboot reboot
+```
+
+4. 打开 Magisk 确认版本号与超级用户授权正常。
+
+> 之后每次刷新内核（无论 fastboot 还是 AnyKernel3），都要用 Magisk 重新修补一次 boot 才能恢复 root；先刷 Magisk 再刷 AnyKernel3 zip 可保留原 ramdisk。
 
 ### 安装 DroidSpaces
 
@@ -60,6 +71,7 @@ fastboot reboot
 - 官方 recovery.img：<https://mirrorbits.lineageos.org/full/sagit/20261106/recovery.img>
 - LOS 安装教程：<https://wiki.lineageos.org/devices/sagit/install>
 - TWRP：<https://dl.twrp.me/sagit/>
+- Magisk：<https://github.com/topjohnwu/Magisk/releases/latest>
 - DroidSpaces：<https://github.com/ravindu644/Droidspaces-OSS>
 - 内核源码：<https://github.com/LineageOS/android_kernel_xiaomi_msm8998>（`lineage-22.2`）
 
@@ -67,5 +79,5 @@ fastboot reboot
 
 - 内核版本 `4.4.302-perf`；已开启命名空间（PID/UTS/IPC/NET/USER）、SYSVIPC、seccomp filter、cgroup v1（memcg/cfs/pids）、devtmpfs、overlayfs、veth/bridge/nf_tables/NAT/macvlan；关闭 `ANDROID_PARANOID_NETWORK`。
 - 所有驱动内建（0 个 `=m` 模块），不存在模块 vermagic 不匹配问题。
-- **SukiSU/KernelSU 不支持该内核**：官方要求 Linux 4.14+，sagit 为 4.4.302，无法启用，请用 Magisk 获取 root。SukiSU 管理器（仅其它 4.14+ 设备可用）：<https://github.com/SukiSU-Ultra/SukiSU-Ultra/releases/latest>
+- root 方式为 **Magisk**：SukiSU / KernelSU 要求 Linux 4.14+，sagit 的 4.4.302 不满足，故本内核不集成。
 - 刷机有风险，自行承担。
